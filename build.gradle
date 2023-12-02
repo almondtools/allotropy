@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
-    id("io.github.gradle-nexus.publish-plugin") version "2.0.0-rc-1"
+    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
 repositories {
@@ -34,7 +34,7 @@ dependencies {
     examplesImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     examplesImplementation 'io.github.bonigarcia:webdrivermanager:5.4.1'
     examplesImplementation 'io.undertow:undertow-core:2.3.7.Final'
-    examplesImplementation 'ch.qos.logback:logback-classic:1.4.8'
+    examplesImplementation 'ch.qos.logback:logback-classic:1.4.13'
     examplesImplementation 'org.slf4j:jul-to-slf4j:2.0.7'
     
 }
@@ -42,7 +42,27 @@ dependencies {
 group = 'net.amygdalum'
 version = '0.0.1-SNAPSHOT'
 description = 'net.amygdalum:allotropy'
-java.sourceCompatibility = JavaVersion.VERSION_20
+java.sourceCompatibility = JavaVersion.VERSION_17
+
+
+task javadocJar(type: Jar) {
+    dependsOn javadoc
+    archiveClassifier.set('javadoc')
+    from javadoc.destinationDir
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+}
+
+jar {
+    manifest {
+        attributes(
+            'Automatic-Module-Name': 'net.amygdalum.allotropy'
+        )
+    }
+}
 
 nexusPublishing {
     repositories {
@@ -54,6 +74,8 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from(components.java)
+            artifact sourcesJar
+            artifact javadocJar
             
 	        pom {
 		        name = 'Allotropy'
@@ -80,6 +102,12 @@ publishing {
 	        }
         }
     }
+	repositories {
+        maven {
+            name = 'sonatype'
+            credentials(PasswordCredentials)
+        }
+    }
 }
 
 signing {
@@ -92,6 +120,5 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(Javadoc) {
     options.encoding = 'UTF-8'
+    options.addBooleanOption('Xdoclint:none', true)
 }
-
-
