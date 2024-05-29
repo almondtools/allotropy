@@ -40,7 +40,7 @@ dependencies {
 }
 
 group = 'net.amygdalum'
-version = '0.0.1'
+version = '0.0.2-SNAPSHOT'
 description = 'net.amygdalum:allotropy'
 java.sourceCompatibility = JavaVersion.VERSION_17
 
