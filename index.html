@@ -38,75 +38,78 @@
                 <li>with rich annotation support</li></ul></p>
   </section>
               <section class="page-section">
-            <h2>Example</h2>
-            <div class="row">        <div class="order-2 col-lg-4">                <div class="card info-card">        <div class="card-header"><h4 class="panel-title">Probably you need some hints ...</h4></div>
-        <div class="card-body">                <ul>                    <li>how to define devices</li>
-                    <li>how to structure your tests</li>
-                    <li>how to use the fluent assertion library</li></ul></div></div></div>
-        <div class="order-1 col-lg-8">            <h4>Write a small test</h4>
-            <p>                <ul>                    <li>Start with the basic Test Class</li>
-                        <div><pre><code >public class BasicExampleTest {
-    @FromContext
-    private WebDriver driver;
-}</code></pre></div>
-                    <li>Define the devices the tests should run against</li>
-                        <div><pre><code >public class ExampleDevices {
-    
-    public static class Desktop implements Device {
-        ...
-    }
-    
-    public static class Tablet implements Device {
-        ...
-    }
-    
-    public static class Phone implements Device {
-        ...
-    }
-    
-}</code></pre></div>
-                    <li>Register the devices you want to test on</li>
-                        <div><pre><code >@RegisterDevice(id = &quot;desktop&quot;, device = ExampleDevices.Desktop.class)
+                <div class="row">        <div class="order-1 col-lg-8">            <h2>Writing Tests</h2>
+<h3>1. Start with the basic test class</h3>
+<p><code>BasicExampleTest.java</code></p>
+<pre><code>public class BasicExampleTest {
+  @FromContext
+  private WebDriver driver;
+}
+</code></pre>
+<h3>2. Define the devices the test should run against</h3>
+<p><code>ExampleDevices.java</code></p>
+<pre><code>public class ExampleDevices {
+  public static class Desktop implements Device {
+    ...
+  }
+
+  public static class Tablet implements Device {
+    ...
+  }
+
+  public static class Phone implements Device {
+    ...
+  }
+}
+</code></pre>
+<h3>3. Register the devices you want to test on</h3>
+<p><code>BasicExampleTest.java</code></p>
+<pre><code>@RegisterDevice(id = &quot;desktop&quot;, device = ExampleDevices.Desktop.class)
 @RegisterDevice(id = &quot;tablet&quot;, device = ExampleDevices.Tablet.class)
 @RegisterDevice(id = &quot;phone&quot;, device = ExampleDevices.Phone.class)
 public class BasicExampleTest {
-    @FromContext
-    private WebDriver driver;
-}</code></pre></div>
-                    <li>Specify the objects to check</li>
-                        <div><pre><code > @RegisterDevice(id = &quot;desktop&quot;, device = ExampleDevices.ChromeDesktop.class)
- @RegisterDevice(id = &quot;tablet&quot;, device = ExampleDevices.ChromeTablet.class)
- @RegisterDevice(id = &quot;phone&quot;, device = ExampleDevices.ChromePhone.class)
- public class BasicExampleTest {
-     @FromContext
-     private WebDriver driver;
-
-     @FindBy(css = &quot;.headline&quot;)
-     private WebElement headline;
- 
- }</code></pre></div>
-                    <li>Write your first test for a subset of your devices</li>
-                        <div><pre><code >@RegisterDevice(id = &quot;desktop&quot;, device = ExampleDevices.ChromeDesktop.class)
-@RegisterDevice(id = &quot;tablet&quot;, device = ExampleDevices.ChromeTablet.class)
-@RegisterDevice(id = &quot;phone&quot;, device = ExampleDevices.ChromePhone.class)
+  @FromContext
+  private WebDriver driver;
+}
+</code></pre>
+<h3>4. Add the page items you want to interact with</h3>
+<p><code>BasicExampleTest.java</code></p>
+<pre><code>@RegisterDevice(id = &quot;desktop&quot;, device = ExampleDevices.Desktop.class)
+@RegisterDevice(id = &quot;tablet&quot;, device = ExampleDevices.Tablet.class)
+@RegisterDevice(id = &quot;phone&quot;, device = ExampleDevices.Phone.class)
 public class BasicExampleTest {
-    @FromContext
-    private WebDriver driver;
+  @FromContext
+  private WebDriver driver;
 
-    @FindBy(css = &quot;.headline&quot;)
-    private WebElement headline;
+  @FindBy(css = &quot;.headline&quot;)
+  private WebElement headline;
+}
+</code></pre>
+<h3>5. Write your first test for a subset of your devices</h3>
+<p><code>BasicExampleTest.java</code></p>
+<pre><code>@RegisterDevice(id = &quot;desktop&quot;, device = ExampleDevices.Desktop.class)
+@RegisterDevice(id = &quot;tablet&quot;, device = ExampleDevices.Tablet.class)
+@RegisterDevice(id = &quot;phone&quot;, device = ExampleDevices.Phone.class)
+public class BasicExampleTest {
+  @FromContext
+  private WebDriver driver;
 
-    @WithDevice(&quot;tablet&quot;)
-    @WithDevice(&quot;phone&quot;)
-    void mobileHeadline() {
-        assertEquals(&quot;Headline Mobile&quot;, headline.getText());
-    }
+  @FindBy(css = &quot;.headline&quot;)
+  private WebElement headline;
 
-    @WithDevice(&quot;desktop&quot;)
-    void desktopHeadline() {
-        assertEquals(&quot;Headline Default&quot;, headline.getText());
-    }
-}</code></pre></div></ul></p></div></div>
+  @WithDevice(&quot;tablet&quot;)
+  @WithDevice(&quot;phone&quot;)
+  void mobileHeadline() {
+    assertEquals(&quot;Headline Mobile&quot;, headline.getText());
+  }
+
+  @WithDevice(&quot;desktop&quot;)
+  void desktopHeadline() {
+    assertEquals(&quot;Headline Default&quot;, headline.getText());
+  }
+}
+</code></pre>
+</div></div>
   </section>
             
               <section class="page-section">
