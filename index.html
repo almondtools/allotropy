@@ -38,7 +38,7 @@
                 <li>with rich annotation support</li></ul></p>
   </section>
               <section class="page-section">
-                <div class="row">        <div class="order-1 col-lg-8">            <h2>Writing Tests</h2>
+                <div class="row">        <div class="order-1 col-lg-8">            <h2>Writing a Test with Allotropy</h2>
 <h3>1. Start with the basic test class</h3>
 <p><code>BasicExampleTest.java</code></p>
 <pre><code>public class BasicExampleTest {
@@ -86,10 +86,9 @@ public class BasicExampleTest {
 }
 </code></pre>
 <h3>5. Write your first test for a subset of your devices</h3>
-<p><code>BasicExampleTest.java</code></p>
+<p><code>FluentExampleTest.java</code></p>
 <pre><code>@RegisterDevice(id = &quot;desktop&quot;, device = ExampleDevices.Desktop.class)
-@RegisterDevice(id = &quot;tablet&quot;, device = ExampleDevices.Tablet.class)
-@RegisterDevice(id = &quot;phone&quot;, device = ExampleDevices.Phone.class)
+@RegisterDevice(id = &quot;mobile&quot;, device = ExampleDevices.Mobile.class)
 public class BasicExampleTest {
   @FromContext
   private WebDriver driver;
@@ -108,6 +107,57 @@ public class BasicExampleTest {
     assertEquals(&quot;Headline Default&quot;, headline.getText());
   }
 }
+</code></pre>
+<h2>Asserting Layout Constraints with Fluent Allotropy</h2>
+<h3>1. Write the Base Test</h3>
+<p>Consider two parts, text and image</p>
+<ul>
+<li>to be aligned next to each other on large screen width</li>
+<li>to be aligned above each other on small screen width</li>
+</ul>
+<p><code>BasicExampleTest.java</code></p>
+<pre><code>@RegisterDevice(id = &quot;desktop&quot;, device = ExampleDevices.ChromeDesktop.class)
+@RegisterDevice(id = &quot;mobile&quot;, device = ExampleDevices.ChromePhone.class)
+public class FluentExampleTest {
+  @FindBy(css = &quot;.text&quot;)
+  private WebElement text;
+  @FindBy(css = &quot;.image&quot;)
+  private WebElement image;
+
+  @FromContext
+  private WebDriver driver;
+  @FromContext
+  private Server server;
+
+  @View
+  void prepare() {
+    driver.navigate().to(server.url(&quot;/textImage.html&quot;));
+  }
+
+  @WithDevice(&quot;mobile&quot;)
+  void aboveEachOther() {
+    //assertions go here
+  }
+
+  @WithDevice(&quot;desktop&quot;)
+  void nextToEachOther() {
+    //assertions go here
+  }
+}
+</code></pre>
+<h3>2. Fill in the proper expectations</h3>
+<p><code>BasicExampleTest.java</code></p>
+<pre><code>...
+  @WithDevice(&quot;mobile&quot;)
+  void aboveEachOther() {
+    Expectations.expect(image).below().of(text);
+  }
+
+  @WithDevice(&quot;desktop&quot;)
+  void nextToEachOther() {
+    Expectations.expect(image).right().of(text);
+  }
+...
 </code></pre>
 </div></div>
   </section>
