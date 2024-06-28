@@ -12,7 +12,10 @@ public class ExampleDevices {
     public static abstract class SimpleDevice implements Device {
         static {
             if (System.getProperty("webdriver.chrome.driver") == null) {
-                WebDriverManager.chromedriver().setup();
+                WebDriverManager.chromedriver()
+                .clearResolutionCache()
+                .clearDriverCache()
+                .setup();
             }
         }
 

@@ -1,0 +1,39 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		.text-image {
+		display:flex;
+			flex-direction:column;
+			align-items: stretch;
+		}
+		@media (min-width: 1000px) {
+			.text-image {flex-direction:row;}
+			
+		}
+		.image {
+			flex-basis:50%;
+			min-width:200px;
+			min-height:200px;
+			background:red;
+		}
+		.text {
+			flex-basis:50%;
+		}
+		@media (min-width: 1000px) {
+			.image {flex-basis:100%;}
+			.text {flex-basis:100%;}
+		}
+	</style>
+</head>
+<body>
+	<div class="headline">Headline</div>
+	<div class="text-image">
+		<div class="text">
+		Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+		</div>
+		<div class="image">
+		</div>
+	</div>
+	
+</body>
