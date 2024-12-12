@@ -86,10 +86,9 @@ public class TestInterpreter implements Interpreter, AutoCloseable {
     }
 
     protected <T extends TestDescriptor> Optional<TestContext<T>> contextForDescriptor(Class<T> clazz) {
-        Optional<TestContext<?>> findFirst = contexts.stream()
+        return contexts.stream()
             .filter(c -> clazz.isInstance(c.descriptor()))
-            .findFirst();
-        return findFirst
+            .findFirst()
             .map(c -> c.cast(clazz));
     }
 
@@ -103,31 +102,29 @@ public class TestInterpreter implements Interpreter, AutoCloseable {
     public void enterEngineDescriptor(AllotropyEngineDescriptor descriptor) throws Exception {
         this.config = descriptor.getConfiguration();
         pushContext(descriptor).assign(new RootContext());
+        engineExecutionListener.executionStarted(descriptor);
     }
 
     @Override
     public void leaveEngineDescriptor(AllotropyEngineDescriptor descriptor, Optional<Throwable> e) {
-        if (e.isPresent()) {
-            engineExecutionListener.executionFinished(descriptor, resultFrom(e));
-        }
+        engineExecutionListener.executionFinished(descriptor, resultFrom(e));
         dropContext(descriptor);
     }
 
     @Override
     public void enterViewContainerDescriptor(ViewContainerDescriptor descriptor) throws Exception {
         pushContext(descriptor).assign(descriptor.getClassSource().getJavaClass());
+        engineExecutionListener.executionStarted(descriptor);
         registrations.clear(VIEW);
         registerExtensions(descriptor.getClassSource().getJavaClass(), descriptor);
         for (var extension : extensions.findAll(BeforeViewCallback.class, descriptor)) {
-            extension.beforeView(descriptor.getClassSource().getJavaClass(),registrations);
+            extension.beforeView(descriptor.getClassSource().getJavaClass(), registrations);
         }
     }
 
     @Override
     public void leaveViewContainerDescriptor(ViewContainerDescriptor descriptor, Optional<Throwable> e) {
-        if (e.isPresent()) {
-            engineExecutionListener.executionFinished(descriptor, resultFrom(e));
-        }
+        engineExecutionListener.executionFinished(descriptor, resultFrom(e));
         dropContext(descriptor);
     }
 
@@ -142,6 +139,7 @@ public class TestInterpreter implements Interpreter, AutoCloseable {
         pageObjects = registrations.forScope(DEVICE).resolve(PageObjects.class, d -> new PageObjects(driver, registrations, config.selectors()));
 
         populateContext(driver);
+        engineExecutionListener.executionStarted(descriptor);
         context.assign(device);
         callViewMethod(descriptor);
     }
@@ -149,23 +147,20 @@ public class TestInterpreter implements Interpreter, AutoCloseable {
     @Override
     public void leaveDeviceDescriptor(DeviceDescriptor descriptor, Optional<Throwable> e) {
         driver = null;
-        if (e.isPresent()) {
-            engineExecutionListener.executionFinished(descriptor, resultFrom(e));
-        }
+        engineExecutionListener.executionFinished(descriptor, resultFrom(e));
         dropContext(descriptor);
     }
 
     @Override
     public void enterTestContainerDescriptor(TestContainerDescriptor descriptor) throws Exception {
         pushContext(descriptor).assign(descriptor.getClassSource().getJavaClass());
+        engineExecutionListener.executionStarted(descriptor);
         registerExtensions(descriptor.getClassSource().getJavaClass(), descriptor);
     }
 
     @Override
     public void leaveTestContainerDescriptor(TestContainerDescriptor descriptor, Optional<Throwable> e) {
-        if (e.isPresent()) {
-            engineExecutionListener.executionFinished(descriptor, resultFrom(e));
-        }
+        engineExecutionListener.executionFinished(descriptor, resultFrom(e));
         dropContext(descriptor);
     }
 

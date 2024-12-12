@@ -1,6 +1,9 @@
 package net.amygdalum.allotropy;
 
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatedFields;
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatedMethods;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
+import static org.junit.platform.commons.support.AnnotationSupport.findRepeatableAnnotations;
 import static org.junit.platform.commons.support.HierarchyTraversalMode.BOTTOM_UP;
 
 import java.lang.reflect.Field;
@@ -11,7 +14,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-import org.junit.platform.commons.support.AnnotationSupport;
 import org.junit.platform.engine.TestSource;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
@@ -74,7 +76,7 @@ public class ViewContainerDescriptor extends AbstractTestDescriptor implements I
 
     public List<String> deviceIds() {
         return streamHierarchy(getClassSource().getJavaClass())
-            .flatMap(c -> AnnotationSupport.findRepeatableAnnotations(c, RegisterDevice.class).stream())
+            .flatMap(c -> findRepeatableAnnotations(c, RegisterDevice.class).stream())
             .map(a -> a.id())
             .filter(id -> deviceIdRestrictions.isEmpty() || deviceIdRestrictions.contains(id))
             .collect(Collectors.toList());
@@ -82,7 +84,7 @@ public class ViewContainerDescriptor extends AbstractTestDescriptor implements I
 
     public Class<? extends Device> deviceClassFor(String deviceId) {
         return streamHierarchy(getClassSource().getJavaClass())
-            .flatMap(c -> AnnotationSupport.findRepeatableAnnotations(c, RegisterDevice.class).stream())
+            .flatMap(c -> findRepeatableAnnotations(c, RegisterDevice.class).stream())
             .filter(a -> a.id().equals(deviceId))
             .map(a -> a.device())
             .findFirst()
@@ -90,14 +92,14 @@ public class ViewContainerDescriptor extends AbstractTestDescriptor implements I
     }
 
     public Method getViewMethod() {
-        return AnnotationSupport.findAnnotatedMethods(getClassSource().getJavaClass(), View.class, BOTTOM_UP)
+        return findAnnotatedMethods(getClassSource().getJavaClass(), View.class, BOTTOM_UP)
             .stream()
             .findFirst()
             .orElseThrow();
     }
 
     public ViewObject getViewObject() {
-        Field viewField = AnnotationSupport.findAnnotatedFields(getClassSource().getJavaClass(), ViewURL.class)
+        Field viewField = findAnnotatedFields(getClassSource().getJavaClass(), ViewURL.class)
             .stream()
             .findFirst()
             .orElseThrow();

@@ -5,6 +5,7 @@ import static net.amygdalum.allotropy.Scope.DEVICE;
 import static net.amygdalum.allotropy.Scope.GLOBAL;
 import static net.amygdalum.allotropy.Scope.TEST;
 import static net.amygdalum.allotropy.Scope.VIEW;
+import static net.amygdalum.allotropy.util.Optionals.any;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class Registrations implements AutoCloseable {
     }
 
     public <T> Optional<T> get(InjectionKey key, Class<T> clazz) {
-        return Optional.ofNullable(resources.get(key))
+        return any(resources.get(key))
             .map(r -> r.value())
             .filter(clazz::isInstance)
             .map(clazz::cast);

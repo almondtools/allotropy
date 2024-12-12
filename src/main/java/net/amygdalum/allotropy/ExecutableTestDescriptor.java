@@ -1,7 +1,9 @@
 package net.amygdalum.allotropy;
 
+import static org.junit.platform.commons.support.AnnotationSupport.findRepeatableAnnotations;
+
 import java.lang.reflect.Method;
-import org.junit.platform.commons.support.AnnotationSupport;
+
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
@@ -43,7 +45,7 @@ public class ExecutableTestDescriptor extends AbstractTestDescriptor implements 
             .filter(MethodSource.class::isInstance)
             .map(MethodSource.class::cast)
             .stream()
-            .flatMap(m -> AnnotationSupport.findRepeatableAnnotations(m.getJavaMethod(), WithDevice.class).stream())
+            .flatMap(m -> findRepeatableAnnotations(m.getJavaMethod(), WithDevice.class).stream())
             .map(w -> w.value())
             .anyMatch(v -> id.equals(v));
     }

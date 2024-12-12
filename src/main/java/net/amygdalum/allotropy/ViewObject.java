@@ -1,5 +1,6 @@
 package net.amygdalum.allotropy;
 
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatedMethods;
 import static org.junit.platform.commons.support.HierarchyTraversalMode.BOTTOM_UP;
 import static org.junit.platform.commons.support.ReflectionSupport.findFields;
 
@@ -7,7 +8,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.junit.platform.commons.support.AnnotationSupport;
 import org.openqa.selenium.WebDriver;
 
 public record ViewObject(Field viewField, ViewURL viewSpec) {
@@ -24,7 +24,7 @@ public record ViewObject(Field viewField, ViewURL viewSpec) {
                     pageObjects.process(pageObject);
                     viewField.setAccessible(true);
                     viewField.set(object, pageObject);
-                    Method viewMethod = AnnotationSupport.findAnnotatedMethods(pageObject.getClass(), View.class, BOTTOM_UP)
+                    Method viewMethod = findAnnotatedMethods(pageObject.getClass(), View.class, BOTTOM_UP)
                         .stream()
                         .findFirst()
                         .orElse(null);

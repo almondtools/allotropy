@@ -1,5 +1,7 @@
 package net.amygdalum.allotropy;
 
+import static net.amygdalum.allotropy.util.Optionals.some;
+
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -71,14 +73,16 @@ public class GroupByView implements Function<InitializationContext<AllotropyEngi
             }
 
             TestDescriptor descriptor = prototype.create(id);
-            for (var protoChild : prototype.getChildren().stream().filter(PrototypeTestdescriptor.class::isInstance).map(PrototypeTestdescriptor.class::cast)
+            for (var protoChild : prototype.getChildren().stream()
+                .filter(PrototypeTestdescriptor.class::isInstance)
+                .map(PrototypeTestdescriptor.class::cast)
                 .toList()) {
                 monomorphize(protoChild, from, to, deviceId).ifPresent(descriptor::addChild);
             }
             if (!descriptor.getChildren().isEmpty()) {
-                return Optional.of(descriptor);
+                return some(descriptor);
             } else if (descriptor instanceof ExecutableTestDescriptor exec && exec.supportsDevice(deviceId)) {
-                return Optional.of(descriptor);
+                return some(descriptor);
             } else {
                 return Optional.empty();
             }

@@ -1,8 +1,8 @@
 package net.amygdalum.allotropy;
 
-import java.util.function.Predicate;
+import static org.junit.platform.commons.support.AnnotationSupport.isAnnotated;
 
-import org.junit.platform.commons.support.AnnotationSupport;
+import java.util.function.Predicate;
 
 public class OnlyAllotropyTests implements Predicate<Class<?>> {
 
@@ -13,7 +13,7 @@ public class OnlyAllotropyTests implements Predicate<Class<?>> {
     @Override
     public boolean test(Class<?> clazz) {
         while (clazz != null) {
-            if (AnnotationSupport.isAnnotated(clazz, RegisterDevices.class)) {
+            if (isAnnotated(clazz, RegisterDevices.class)) {
                 return true;
             }
             clazz = clazz.getEnclosingClass();

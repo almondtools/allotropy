@@ -1,9 +1,19 @@
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
 plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
     id("com.github.ben-manes.versions") version "0.51.0"
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
+}
+
+apply plugin: "com.github.ben-manes.versions"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 repositories {
@@ -22,29 +32,31 @@ sourceSets {
         java {
             compileClasspath += main.output + test.output
             runtimeClasspath += main.output + test.output
-            srcDir file('src/examples/java')
+            srcDirs = [file('src/examples/java')]
         }
-        resources.srcDir file('src/examples/resources')
+        resources {
+            srcDirs = [file('src/examples/resources')]
+        }
     }
 }
 
 dependencies {
-    api 'org.junit.platform:junit-platform-engine:1.10.3'
-    api 'org.junit.platform:junit-platform-commons:1.10.3'
+    api 'org.junit.platform:junit-platform-engine:1.11.3'
+    api 'org.junit.platform:junit-platform-commons:1.11.3'
     api 'org.seleniumhq.selenium:selenium-java:4.22.0'
-    examplesImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.3'
+    testImplementation 'org.junit.platform:junit-platform-engine:1.11.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.3'
+    examplesImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.3'
     examplesImplementation 'io.github.bonigarcia:webdrivermanager:5.9.1'
     examplesImplementation 'io.undertow:undertow-core:2.3.14.Final'
     examplesImplementation 'ch.qos.logback:logback-classic:1.5.6'
     examplesImplementation 'org.slf4j:jul-to-slf4j:2.0.13'
-    examplesImplementation 'net.amygdalum:fluent-allotropy:0.0.2'  
+    examplesImplementation 'net.amygdalum:fluent-allotropy:0.0.3'
 }
 
 group = 'net.amygdalum'
 version = '0.0.3-SNAPSHOT'
 description = 'net.amygdalum:allotropy'
-java.sourceCompatibility = JavaVersion.VERSION_17
-
 
 task javadocJar(type: Jar) {
     dependsOn javadoc

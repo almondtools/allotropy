@@ -1,5 +1,7 @@
 package net.amygdalum.allotropy;
 
+import static net.amygdalum.allotropy.util.Optionals.some;
+
 import java.util.Optional;
 
 public interface Interpreter {
@@ -10,7 +12,7 @@ public interface Interpreter {
             descriptor.visitChildren(this);
             leaveEngineDescriptor(descriptor, Optional.empty());
         } catch (Throwable e) {
-            leaveEngineDescriptor(descriptor, Optional.of(e));
+            leaveEngineDescriptor(descriptor, some(e));
         }
     }
 
@@ -24,7 +26,7 @@ public interface Interpreter {
             descriptor.visitChildren(this);
             leaveDeviceDescriptor(descriptor, Optional.empty());
         } catch (Throwable e) {
-            leaveDeviceDescriptor(descriptor, Optional.of(e));
+            leaveDeviceDescriptor(descriptor, some(e));
         }
     }
 
@@ -38,7 +40,7 @@ public interface Interpreter {
             descriptor.visitChildren(this);
             leaveViewContainerDescriptor(descriptor, Optional.empty());
         } catch (Throwable e) {
-            leaveViewContainerDescriptor(descriptor, Optional.of(e));
+            leaveViewContainerDescriptor(descriptor, some(e));
         }
 
     }
@@ -53,7 +55,7 @@ public interface Interpreter {
             descriptor.visitChildren(this);
             leaveTestContainerDescriptor(descriptor, Optional.empty());
         } catch (Throwable e) {
-            leaveTestContainerDescriptor(descriptor, Optional.of(e));
+            leaveTestContainerDescriptor(descriptor, some(e));
         }
     }
 
@@ -67,7 +69,7 @@ public interface Interpreter {
             descriptor.visitChildren(this);
             leaveExecutableTestDescriptor(descriptor, Optional.empty());
         } catch (Throwable e) {
-            leaveExecutableTestDescriptor(descriptor, Optional.of(e));
+            leaveExecutableTestDescriptor(descriptor, some(e));
         }
     }
 
