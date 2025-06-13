@@ -47,15 +47,15 @@ dependencies {
     testImplementation 'org.junit.platform:junit-platform-engine:1.12.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.12.2'
     examplesImplementation 'org.junit.jupiter:junit-jupiter-api:5.12.2'
-    examplesImplementation 'io.github.bonigarcia:webdrivermanager:5.9.1'
-    examplesImplementation 'io.undertow:undertow-core:2.3.14.Final'
+    examplesImplementation 'io.github.bonigarcia:webdrivermanager:6.1.0'
+    examplesImplementation 'io.undertow:undertow-core:2.3.18.Final'
     examplesImplementation 'ch.qos.logback:logback-classic:1.5.18'
     examplesImplementation 'org.slf4j:jul-to-slf4j:2.0.17'
-    examplesImplementation 'net.amygdalum:fluent-allotropy:0.0.3'
+    examplesImplementation 'net.amygdalum:fluent-allotropy:0.0.5'
 }
 
 group = 'net.amygdalum'
-version = '0.0.5-SNAPSHOT'
+version = '0.0.5'
 description = 'net.amygdalum:allotropy'
 
 task javadocJar(type: Jar) {
