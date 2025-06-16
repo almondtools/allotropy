@@ -7,8 +7,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.junit.platform.commons.annotation.Testable;
+
 @Retention(RUNTIME)
 @Target({TYPE, ANNOTATION_TYPE})
+@Testable
 public @interface RegisterDevices {
 
     RegisterDevice[] value();
