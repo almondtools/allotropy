@@ -4,7 +4,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
-    id("com.github.ben-manes.versions") version "0.52.0"
+    id("com.github.ben-manes.versions") version "0.54.0"
 }
 
 group = 'net.amygdalum'
@@ -24,10 +24,6 @@ repositories {
     mavenLocal()
 }
 
-configurations {
-    examplesImplementation.extendsFrom testImplementation
-}
-
 sourceSets {
     examples {
         java {
@@ -41,19 +37,23 @@ sourceSets {
     }
 }
 
+configurations.named("examplesImplementation") {
+    extendsFrom configurations.testImplementation
+}
+
 dependencies {
-    api 'org.junit.platform:junit-platform-engine:1.12.2'
-    api 'org.junit.platform:junit-platform-commons:1.12.2'
-    api 'org.seleniumhq.selenium:selenium-java:4.33.0'
+    api 'org.junit.platform:junit-platform-engine:1.14.4'
+    api 'org.junit.platform:junit-platform-commons:1.14.4'
+    api 'org.seleniumhq.selenium:selenium-java:4.44.0'
 
-    testImplementation 'org.junit.platform:junit-platform-engine:1.12.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.12.2'
+    testImplementation 'org.junit.platform:junit-platform-engine:1.14.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.14.4'
 
-    examplesImplementation 'org.junit.jupiter:junit-jupiter-api:5.12.2'
-    examplesImplementation 'io.github.bonigarcia:webdrivermanager:6.1.0'
-    examplesImplementation 'io.undertow:undertow-core:2.3.18.Final'
-    examplesImplementation 'ch.qos.logback:logback-classic:1.5.18'
-    examplesImplementation 'org.slf4j:jul-to-slf4j:2.0.17'
+    examplesImplementation 'org.junit.jupiter:junit-jupiter-api:5.14.4'
+    examplesImplementation 'io.github.bonigarcia:webdrivermanager:6.3.4'
+    examplesImplementation 'io.undertow:undertow-core:2.4.1.Final'
+    examplesImplementation 'ch.qos.logback:logback-classic:1.5.32'
+    examplesImplementation 'org.slf4j:jul-to-slf4j:2.0.18'
 
     examplesImplementation 'net.amygdalum:fluent-allotropy:0.0.6'
 }
