@@ -1,1 +1,13 @@
+plugins {
+  id("com.gradleup.nmcp.settings").version("1.4.4")
+}
+
 rootProject.name = 'allotropy'
+
+
+nmcpSettings {
+  centralPortal {
+	username = settings.providers.gradleProperty("centralUsername").get()
+	password = settings.providers.gradleProperty("centralPassword").get()
+  }
+}

@@ -5,22 +5,23 @@ plugins {
     id 'maven-publish'
     id 'signing'
     id("com.github.ben-manes.versions") version "0.52.0"
-    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
-apply plugin: "com.github.ben-manes.versions"
+group = 'net.amygdalum'
+description = 'A Test Framework for testing Responsive Layouts'
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
+
+    withSourcesJar()
+    withJavadocJar()
 }
 
 repositories {
+    mavenCentral()
     mavenLocal()
-    maven {
-        url = uri('https://repo.maven.apache.org/maven2/')
-    }
 }
 
 configurations {
@@ -44,29 +45,17 @@ dependencies {
     api 'org.junit.platform:junit-platform-engine:1.12.2'
     api 'org.junit.platform:junit-platform-commons:1.12.2'
     api 'org.seleniumhq.selenium:selenium-java:4.33.0'
+
     testImplementation 'org.junit.platform:junit-platform-engine:1.12.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.12.2'
+
     examplesImplementation 'org.junit.jupiter:junit-jupiter-api:5.12.2'
     examplesImplementation 'io.github.bonigarcia:webdrivermanager:6.1.0'
     examplesImplementation 'io.undertow:undertow-core:2.3.18.Final'
     examplesImplementation 'ch.qos.logback:logback-classic:1.5.18'
     examplesImplementation 'org.slf4j:jul-to-slf4j:2.0.17'
+
     examplesImplementation 'net.amygdalum:fluent-allotropy:0.0.6'
-}
-
-group = 'net.amygdalum'
-version = '0.0.7-SNAPSHOT'
-description = 'net.amygdalum:allotropy'
-
-task javadocJar(type: Jar) {
-    dependsOn javadoc
-    archiveClassifier.set('javadoc')
-    from javadoc.destinationDir
-}
-
-task sourcesJar(type: Jar) {
-    archiveClassifier.set('sources')
-    from sourceSets.main.allSource
 }
 
 test {
@@ -81,55 +70,46 @@ jar {
     }
 }
 
-nexusPublishing {
-    repositories {
-        sonatype()
-    }
-}
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from(components.java)
-            artifact sourcesJar
-            artifact javadocJar
-            
-	        pom {
-		        name = 'Allotropy'
-		        description = 'A Test Framework for testing Responsive Layouts'
-		        url = 'https://github.com/almondtools/allotropy'
-	            licenses {
-	                license {
-			            name = 'GNU LESSER GENERAL PUBLIC LICENSE (LGPL)'
-	        		    url = 'http://www.gnu.org/licenses/lgpl.txt'
-	                }
-	            }
-	            developers {
-	                developer {
-			            id = 'amygdalum'
-	        		    name = 'Stefan Mandel'
-			            email = 'mail@amygdalum.net'
-	                }
-	            }
-	            scm {
-					connection = 'scm:git:git@github.com:almondtools/allotropy.git'
-					developerConnection = 'scm:git:git@github.com:almondtools/allotropy.git'
-					url = 'git@github.com:almondtools/allotropy.git'
-	            }
-	        }
-        }
-    }
-	repositories {
-        maven {
-            name = 'sonatype'
-            credentials(PasswordCredentials)
+            from components.java
+
+            pom {
+                name = 'Allotropy'
+                description = 'A Test Framework for testing Responsive Layouts'
+                url = 'https://github.com/almondtools/allotropy'
+
+                licenses {
+                    license {
+                        name = 'GNU Lesser General Public License v3.0'
+                        url = 'https://www.gnu.org/licenses/lgpl-3.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'amygdalum'
+                        name = 'Stefan Mandel'
+                        email = 'mail@amygdalum.net'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:https://github.com/almondtools/allotropy.git'
+                    developerConnection = 'scm:git:https://github.com/almondtools/allotropy.git'
+                    url = 'https://github.com/almondtools/allotropy'
+                }
+            }
         }
     }
 }
 
 signing {
-	sign publishing.publications.mavenJava
+    useGpgCmd()
+    sign publishing.publications.mavenJava
 }
+
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
