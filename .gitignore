@@ -1,8 +1,2 @@
-/target/
-.classpath
-.project
-/.settings/
-/bin/
-
-.gradle
-build
+/.project
+/.vite
